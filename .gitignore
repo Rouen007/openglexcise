@@ -6,9 +6,13 @@
 
 # 忽略根目录下的”build”文件夹
 /x64
+/OpenGL/x64
 
 # 忽略所有以”.tmp”结尾的文件或文件夹
 *.tmp
+*.tlog
+*.ilk
+
 
 # 忽略根目录下的”config.ini”文件
 /config.ini
