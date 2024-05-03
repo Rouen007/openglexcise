@@ -17,4 +17,9 @@
 /logs/
 
 # 忽略根目录下的””文件夹以及其子文件夹中的内容
-/OpenGL/.vs/
+/OpenGL/.vs
+
+/OpenGL/OpenGL/.vs
+
+/OpenGL/x64
+/OpenGL/OpenGL/x64
