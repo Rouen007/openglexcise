@@ -6,9 +6,11 @@
 #include <sstream>
 #include "renderer.h"
 #include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
 
 
 
@@ -46,64 +48,42 @@ int main(void)
 
 	{
 		float positions[] = {
-				-0.5f,  0.5f,
-				 0.5f, -0.5f,
-				 0.5f,  0.5f,
-				-0.5f, -0.5f
+				-0.5f, -0.5f, 0.0f, 0.0f,
+				 0.5f, -0.5f, 1.0f, 0.0f,
+				 0.5f,  0.5f, 1.0f, 1.0f,
+				-0.5f,  0.5f, 0.0f, 1.0f,
 		};
 
 		unsigned int indices[] = {
 			0, 1, 2,
-			3, 0, 1
+			2, 3, 0
 		};
-
-		/*unsigned int vao;
-		GLCall(glGenVertexArrays(1, &vao));
-		GLCall(glBindVertexArray(vao));*/
+		//GLCall(glEnable(GL_BLEND));
+		//GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
         VertexArray va;
-
-		/*unsigned int buffer;
-		GLCall(glGenBuffers(1, &buffer));
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, buffer));
-		GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, positions, GL_STATIC_DRAW));*/
-		VertexBuffer vb(positions, 8 * sizeof(float));
-
+		VertexBuffer vb(positions, 4*4 * sizeof(float));
         VertexBufferLayout layout;
-        layout.Push<float>(2);
+		layout.Push<float>(2);
+		layout.Push<float>(2);
         va.AddBuffer(vb, layout);
 
-		/*GLCall(glEnableVertexAttribArray(0));
-		GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)0));*/
-
 		IndexBuffer ib(indices, 6);
-		//unsigned int ibo;
-		//GLCall(glGenBuffers(1, &ibo));
-		//GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-		//GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 6, indices, GL_STATIC_DRAW));
-
 		Shader shader("res/shaders/Basic.shader");
 		shader.Bind();
-		//ShaderProgramSource source = parseShader("res/shaders/Basic.shader");
-
-		//unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
-		//GLCall(glUseProgram(shader));
-
-		//GLCall(unsigned int location = glGetUniformLocation(shader, "u_Color"));
-		//ASSERT(location != -1);
-		//GLCall(glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f));
 		shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
-		//GLCall(glUseProgram(0));
+		Texture texture("res/textures/qiya.jpg");
+		texture.Bind();
+		shader.SetUniform1i("u_Texture", 0);
+
+
 		va.Unbind();
 		vb.Unbind();
 		ib.Unbind();
 		shader.Unbind();
-		//GLCall(glBindVertexArray(0));
-		//GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-		//GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
-
+		Renderer render;
 
 		float r = 0;
 #define OFFSET 0.05f
@@ -111,27 +91,14 @@ int main(void)
 		while (!glfwWindowShouldClose(window))
 		{
 			/* Render here */
-			GLCall(glClear(GL_COLOR_BUFFER_BIT));
+			render.Clear();
 
 			// write code here
-			//GLCall(glUseProgram(shader));
-			//GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
 			shader.Bind();
 			shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 
-            va.Unbind();
+			render.Draw(va, ib, shader);
 
-			//GLCall(glBindVertexArray(vao));
-			/*GLCall(glBindBuffer(GL_ARRAY_BUFFER, buffer));
-			GLCall(glEnableVertexAttribArray(0));
-			GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)0));*/
-
-
-			//GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-            va.Bind();
-			ib.Bind();
-
-			GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 			//
 			if (r > 1.0f) increment = -OFFSET;
 			else if (r < 0) increment = OFFSET;
