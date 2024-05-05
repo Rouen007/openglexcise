@@ -5,10 +5,13 @@
     layout(location=1) in vec2 texCoord;
     
     out vec2 v_TexCoord;
+
+    uniform mat4 u_MVP;
+
     void main()
     {
+       gl_Position = u_MVP * position;
        v_TexCoord = texCoord;
-       gl_Position = position;
     };
 
     #shader fragment
@@ -23,5 +26,5 @@
     void main()
     {
        vec4 texColor = texture(u_Texture, v_TexCoord);
-       color = texColor;
+       color = texColor*u_Color;
     };

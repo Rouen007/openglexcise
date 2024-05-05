@@ -34,6 +34,7 @@ void Shader::SetUniform4f(const std::string& name, float f1, float f2, float f3,
 }
 
 
+
 void Shader::SetUniform1f(const std::string& name, float f1)
 {
 	unsigned location = GetUniformLocation(name);
@@ -44,6 +45,12 @@ void Shader::SetUniform1i(const std::string& name, int i1)
 {
 	unsigned location = GetUniformLocation(name);
 	GLCall(glUniform1i(location, i1));
+}
+
+void Shader::SetUniformMat4f(const std::string& name, glm::mat4& matrix)
+{
+	unsigned location = GetUniformLocation(name);
+	GLCall(glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]));
 }
 
 int Shader::GetUniformLocation(const std::string& name)
