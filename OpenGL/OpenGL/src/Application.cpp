@@ -13,12 +13,17 @@
 #include "Texture.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-
-
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 int main(void)
 {
     GLFWwindow* window;
+
+	const char* glsl_version = "#version 130";
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
     /* Initialize the library */
     if (!glfwInit())
@@ -50,10 +55,10 @@ int main(void)
 
 	{
 		float positions[] = {
-				-0.5f, -0.5f, 0.0f, 0.0f,
-				 0.5f, -0.5f, 1.0f, 0.0f,
-				 0.5f,  0.5f, 1.0f, 1.0f,
-				-0.5f,  0.5f, 0.0f, 1.0f,
+			100.0f, 100.0f, 0.0f, 0.0f,
+			200.0f, 100.0f, 1.0f, 0.0f,
+			200.0f, 200.0f, 1.0f, 1.0f,
+			100.0f, 200.0f, 0.0f, 1.0f,
 		};
 
 		unsigned int indices[] = {
@@ -72,12 +77,13 @@ int main(void)
 
 		IndexBuffer ib(indices, 6);
 
-		glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+		glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+		glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));
+		
 
 		Shader shader("res/shaders/Basic.shader");
 		shader.Bind();
 		shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
-		shader.SetUniformMat4f("u_MVP", proj);
 
 		Texture texture("res/textures/qiya.jpg");
 		texture.Bind();
@@ -91,17 +97,45 @@ int main(void)
 
 		Renderer render;
 
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+		// Setup Platform/Renderer backends
+		ImGui_ImplGlfw_InitForOpenGL(window, true);
+
+		ImGui_ImplOpenGL3_Init(glsl_version);
+
+		// Setup Dear ImGui style
+		ImGui::StyleColorsDark();
+
 		float r = 0;
 #define OFFSET 0.05f
 		float increment = OFFSET;
+
+		// Our state
+		bool show_demo_window = true;
+		bool show_another_window = false;
+		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+		glm::vec3 translation(200, 200, 0);
+
 		while (!glfwWindowShouldClose(window))
 		{
 			/* Render here */
 			render.Clear();
 
+			// Start the Dear ImGui frame
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplGlfw_NewFrame();
+			ImGui::NewFrame();
+
 			// write code here
 			shader.Bind();
 			shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+			
+			glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+			glm::mat4 mvp = proj * view * model;
+			shader.SetUniformMat4f("u_MVP", mvp);
+
 
 			render.Draw(va, ib, shader);
 
@@ -110,6 +144,25 @@ int main(void)
 			else if (r < 0) increment = OFFSET;
 
 			r += increment;
+
+			
+			// 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
+			{
+				static float f = 0.0f;
+				static int counter = 0;
+
+				ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+				ImGui::SliderFloat3("Translation", &translation.x, 0.0f, 960.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+	
+				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+				
+				ImGui::End();
+			}
+
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 			/* Swap front and back buffers */
 			glfwSwapBuffers(window);
 
@@ -119,6 +172,9 @@ int main(void)
 
 		//glDeleteShader(shader);
 	}
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
     glfwTerminate();
     return 0;
