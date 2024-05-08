@@ -14,7 +14,7 @@ class Shader
 {
 	std::string m_FilePath;
 	unsigned int m_RendererID;
-	std::unordered_map<std::string, int> m_LocataionCache;
+	mutable std::unordered_map<std::string, int> m_LocataionCache;
 	//cache
 public:
 	Shader(const std::string& filepath);
@@ -28,7 +28,7 @@ public:
 	void SetUniform1i(const std::string& name, int i1);
 	void SetUniformMat4f(const std::string& name, glm::mat4& matrix);
 private:
-	int GetUniformLocation(const std::string& name);
+	int GetUniformLocation(const std::string& name) const;
 
 	ShaderProgramSource parseShader(const std::string& filepath);
 	unsigned int CompileShader(unsigned int type, const std::string& source);
