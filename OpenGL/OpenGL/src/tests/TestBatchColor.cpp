@@ -12,9 +12,6 @@ namespace test
 {
 
 	TestBatchColor::TestBatchColor()
-		: m_Proj(glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f))
-		, m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)))
-		, m_R(0)
 	{
 		float positions[] = {
 			-0.175f, -0.125f, 0.0f, 0.2f, 0.9f, 0.2f,1.0f,
@@ -48,7 +45,6 @@ namespace test
 
 		m_Shader = std::make_unique<Shader>("res/shaders/BatchColor.shader");
 		m_Shader->Bind();
-		// m_Shader->SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
 		m_VAO->Unbind();
 		m_VertexBuffer->Unbind();
@@ -73,7 +69,6 @@ namespace test
 		Renderer render;
 
 		m_Shader->Bind();
-		// m_Shader->SetUniform4f("u_Color", 0.3f, m_R, 0.8f, 1.0f);
 
 		{
 			render.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
