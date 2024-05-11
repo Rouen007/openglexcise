@@ -18,6 +18,7 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "tests/TestClearColor.h"
 #include "tests/TestTexture2D.h"
+#include "tests/TestBatchColor.h"
 
 int main(void)
 {
@@ -84,6 +85,7 @@ int main(void)
 		currentTest = testMenu;
 		testMenu->RegisterTest<test::TestClearColor>("clear color");
 		testMenu->RegisterTest<test::TestTexture2D>("texture 2d");
+		testMenu->RegisterTest<test::TestBatchColor>("batch color");
 
 
 		while (!glfwWindowShouldClose(window))
