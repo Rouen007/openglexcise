@@ -45,7 +45,7 @@ void Shader::SetUniform1i(const std::string& name, int i1)
 	GLCall(glUniform1i(location, i1));
 }
 
-void Shader::SetUniform2i(const std::string& name, const int* i1)
+void Shader::SetUniform2Textures(const std::string& name, const int* i1)
 {
 	unsigned location = GetUniformLocation(name);
 	GLCall(glUniform1iv(location, 2, i1));

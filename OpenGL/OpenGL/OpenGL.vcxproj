@@ -140,6 +140,7 @@
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\tests\Test.cpp" />
     <ClCompile Include="src\tests\TestBatchColor.cpp" />
+    <ClCompile Include="src\tests\TestBatchDynamics.cpp" />
     <ClCompile Include="src\tests\TestBatchTexture2D.cpp" />
     <ClCompile Include="src\tests\TestClearColor.cpp" />
     <ClCompile Include="src\tests\TestTexture2D.cpp" />
@@ -301,6 +302,7 @@
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\tests\Test.h" />
     <ClInclude Include="src\tests\TestBatchColor.h" />
+    <ClInclude Include="src\tests\TestBatchDynamics.h" />
     <ClInclude Include="src\tests\TestBatchTexture2D.h" />
     <ClInclude Include="src\tests\TestClearColor.h" />
     <ClInclude Include="src\tests\TestTexture2D.h" />

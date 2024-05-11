@@ -20,6 +20,7 @@
 #include "tests/TestTexture2D.h"
 #include "tests/TestBatchColor.h"
 #include "tests/TestBatchTexture2D.h"
+#include "tests/TestBatchDynamics.h"
 
 int main(void)
 {
@@ -88,6 +89,7 @@ int main(void)
 		testMenu->RegisterTest<test::TestTexture2D>("texture 2d");
 		testMenu->RegisterTest<test::TestBatchColor>("batch color");
 		testMenu->RegisterTest<test::TestBatchTestTexture2D>("batch texture");
+		testMenu->RegisterTest<test::TestBatchDynamics>("batch dynamics");
 
 
 		while (!glfwWindowShouldClose(window))

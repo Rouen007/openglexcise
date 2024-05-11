@@ -88,7 +88,7 @@ namespace test
 
 		m_Shader->Bind();
 		int samplers[2] = { 0, 1 };
-		m_Shader->SetUniform2i("u_Textures", samplers);
+		m_Shader->SetUniform2Textures("u_Textures", samplers);
 
 		{
 			glm::mat4 model = glm::translate(glm::mat4(1.0f), m_TranslationB);
