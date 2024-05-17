@@ -12,11 +12,6 @@ namespace test
 {
 
 	TestBatchTestTexture2D::TestBatchTestTexture2D()
-		: m_TranslationA(200, 200, 0)
-		, m_TranslationB(400, 200, 0)
-		, m_Proj(glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f))
-		, m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)))
-		, m_R(0)
 	{
 		float positions[] = {
 			-0.175f, -0.125f, 0.0f, 0.2f, 0.9f, 0.2f, 1.0f, 0.0f, 0.0f, 0.0f,
@@ -91,25 +86,13 @@ namespace test
 		m_Shader->SetUniform2Textures("u_Textures", samplers);
 
 		{
-			glm::mat4 model = glm::translate(glm::mat4(1.0f), m_TranslationB);
-			glm::mat4 mvp = m_Proj * m_View * model;
-			m_Shader->SetUniformMat4f("u_MVP", mvp);
 			render.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
 		}
-
-#define OFFSET 0.05f
-		static float increment = OFFSET;
-		if (m_R > 1.0f) increment = -OFFSET;
-		else if (m_R < 0) increment = OFFSET;
-
-		m_R += increment;
 
 	}
 
 	void TestBatchTestTexture2D::OnImGuiRender()
 	{
-		ImGui::SliderFloat3("TranslationA", &m_TranslationA.x, 0.0f, 960.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		ImGui::SliderFloat3("TranslationB", &m_TranslationB.x, 0.0f, 960.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 	}
 
 }

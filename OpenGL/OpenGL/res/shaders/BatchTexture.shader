@@ -10,7 +10,7 @@
     out vec2 v_TexCoord;
     out float v_TexIdx;
 
-    uniform mat4 u_MVP;
+    // uniform mat4 u_MVP;
 
     void main()
     {
